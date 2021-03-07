@@ -1,0 +1,20 @@
+{
+    "name": "lei/video-downloader",
+    "type": "project",
+    "require": {
+        "guzzlehttp/guzzle": "^7.2",
+        "league/climate": "dev-master"
+    },
+    "authors": [
+        {
+            "name": "lei",
+            "email": "sanyue0315@outlook.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "video\\": "src/"
+        }
+    }
+}
