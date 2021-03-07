@@ -55,7 +55,7 @@ class Base
     /**
      * @var string 文件存储路径
      */
-    public string $save_to;
+    public string $save_dir;
 
     /**
      * @var bool 是否分离音频
@@ -72,9 +72,9 @@ class Base
         if (substr($save_dir, -1, 1) == '/') {
             $save_dir = substr($save_dir, 0, strlen($save_dir) - 1);
         }
-        $this->save_to = $save_dir . DIRECTORY_SEPARATOR . 'video/' . static::SAVE_CHILD_DIR . DIRECTORY_SEPARATOR . $this->title . DIRECTORY_SEPARATOR;
-        if (!is_dir($this->save_to)) {
-            mkdir($this->save_to, 0777, true);
+        $this->save_dir = $save_dir . DIRECTORY_SEPARATOR . 'video/' . static::SAVE_CHILD_DIR . DIRECTORY_SEPARATOR . $this->title . DIRECTORY_SEPARATOR;
+        if (!is_dir($this->save_dir)) {
+            mkdir($this->save_dir, 0777, true);
         }
     }
 
@@ -103,7 +103,7 @@ class Base
         $video = new Video();
         $video->title = $this->title;
         $video->header = $this->header;
-        $video->save_to = $this->save_to;
+        $video->save_dir = $this->save_dir;
         $video->real_url = $this->real_url;
         $video->need_merge = count($this->real_url) > 1;
         $video->separate_audio = true;

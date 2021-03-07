@@ -121,5 +121,11 @@ class Application
         //根据视频对象下载视频
         $downloader = new \video\Downloader($video);
         $downloader->download();
+
+        //合并视频
+        //todo
+
+        //分离音频
+        $video->separateAudio();
     }
 }

@@ -22,7 +22,6 @@ class Helper
             $tmp_arr = self::parseStringToArray('=', $v);
             $cookies[$tmp_arr[0]] = urlencode($tmp_arr[1]);
         }
-        var_dump($cookies);
         return $cookies;
     }
 

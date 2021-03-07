@@ -20,11 +20,9 @@ class Downloader
     public function download() {
         $multi_seg = count($this->video->real_url);
         for ($i = 0; $i < $multi_seg; $i++) {
-            $save_to = $this->video->save_to . $i . '.flv';
-            echo $save_to, PHP_EOL;
-            $this->request->download($this->video->real_url[0], $this->video->header, $save_to);
+            $save_to = $this->video->save_dir . $i . '.flv';
+            $this->request->download($this->video->real_url[$i], $this->video->header, $save_to);
         }
-
     }
 
     protected function checkVideoProperty() {

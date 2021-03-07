@@ -76,7 +76,7 @@ class Bilibili extends Base implements VideoUrlParser
     /**
      * @var string 文件存储路径
      */
-    public string $save_to;
+    public string $save_dir;
 
     /**
      * @var bool 是否分离音频
@@ -106,7 +106,7 @@ class Bilibili extends Base implements VideoUrlParser
         $this->web_url = $url;
         $this->setConfig();
         $this->parseBvid();
-        $this->getAid();
+        $this->getAidAndTitle();
         $this->getCid();
         $url = $this->get_video_url . "?avid={$this->aid}&cid={$this->cid}&qn=112";
         $body = $this->doGet($url);
@@ -121,11 +121,11 @@ class Bilibili extends Base implements VideoUrlParser
         $this->bvid = $matches[0];
     }
 
-    protected function getAid() {
+    protected function getAidAndTitle() {
         $url = $this->get_aid_url . $this->bvid;
         $body = $this->doGet($url);
         $this->aid = $body['data']['aid'];
-        $this->title = $body['data']['title'];
+        $this->title = str_replace(' | ', '|', $body['data']['title']);
     }
 
     protected function getCid() {

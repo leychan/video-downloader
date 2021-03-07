@@ -12,7 +12,7 @@ class Video
     /**
      * @var string 视频存储路径
      */
-    public string $save_to = './';
+    public string $save_dir = './';
 
     /**
      * @var array 需要下载的视频路径合集
@@ -52,11 +52,11 @@ class Video
      */
     public function separateAudio() :string {
         //如果只有一个片段,或者有具体的合成的
-        if (!empty($video->specific_path)) {
-            self::separateAudioByVideo($video->specific_path);
+        if (!empty($this->specific_path)) {
+            self::separateAudioByVideo($this->specific_path, $this->save_dir);
         } else if (count($this->real_url) == 1) {
-            $this->specific_path = $this->save_to . '/0.flv';
-            self::separateAudioByVideo($this->specific_path);
+            $this->specific_path = $this->save_dir . '0.flv';
+            self::separateAudioByVideo($this->specific_path, $this->save_dir);
         } else {
             throw new \Exception('视频还未合并, 请合并后再进行音频分离');
         }
@@ -69,10 +69,12 @@ class Video
      * @user lei
      * @date 2021/3/5
      * @param string $path
+     * @param string $save_dir
      * @return array
      */
-    protected static function separateAudioByVideo(string $path) :array {
-        exec("ffmpeg -i {$path} out.mp3", $output);
+    protected static function separateAudioByVideo(string $path, string $save_dir) :array {
+        $shell = "ffmpeg -i '{$path}' '{$save_dir}out.mp3'";
+        exec($shell, $output);
         return $output;
     }
 
