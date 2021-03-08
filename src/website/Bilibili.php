@@ -38,20 +38,20 @@ class Bilibili extends Base implements VideoUrlParser
 
     public Request $request;
 
-    /**
-     * @var string 视频标题
-     */
-    public string $title;
-
-    /**
-     * @var array 视频的真实地址集合
-     */
-    public array $real_url;
-
-    /**
-     * @var string[] 请求头
-     */
-    public array $header;
+//    /**
+//     * @var string 视频标题
+//     */
+//    public string $title;
+//
+//    /**
+//     * @var array 视频的真实地址集合
+//     */
+//    public array $real_url;
+//
+//    /**
+//     * @var string[] 请求头
+//     */
+//    public array $header;
 
     /**
      * 默认的子路径文件夹名
@@ -73,15 +73,15 @@ class Bilibili extends Base implements VideoUrlParser
      */
     const SHOULD_CHECK_ARR = ['get_aid_url', 'get_cid_url', 'get_video_url'];
 
-    /**
-     * @var string 文件存储路径
-     */
-    public string $save_dir;
-
-    /**
-     * @var bool 是否分离音频
-     */
-    public bool $is_sep_audio = false;
+//    /**
+//     * @var string 文件存储路径
+//     */
+//    public string $save_dir;
+//
+//    /**
+//     * @var bool 是否分离音频
+//     */
+//    public bool $separate_audio = false;
 
     public function __construct()
     {
@@ -110,7 +110,7 @@ class Bilibili extends Base implements VideoUrlParser
         $this->getCid();
         $url = $this->get_video_url . "?avid={$this->aid}&cid={$this->cid}&qn=112";
         $body = $this->doGet($url);
-        $this->real_url = array_column($body['data']['durl'], 'url');
+        $this->video->real_url = array_column($body['data']['durl'], 'url');
     }
 
     protected function parseBvid() {
@@ -125,7 +125,7 @@ class Bilibili extends Base implements VideoUrlParser
         $url = $this->get_aid_url . $this->bvid;
         $body = $this->doGet($url);
         $this->aid = $body['data']['aid'];
-        $this->title = str_replace(' | ', '|', $body['data']['title']);
+        $this->video->title = str_replace(' | ', '|', $body['data']['title']);
     }
 
     protected function getCid() {

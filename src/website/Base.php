@@ -22,20 +22,20 @@ class Base
 
     public Request $request;
 
-    /**
-     * @var string 视频标题
-     */
-    public string $title;
-
-    /**
-     * @var array 视频的真实地址集合
-     */
-    public array $real_url;
-
-    /**
-     * @var string[] 请求头
-     */
-    public array $header;
+//    /**
+//     * @var string 视频标题
+//     */
+//    public string $title;
+//
+//    /**
+//     * @var array 视频的真实地址集合
+//     */
+//    public array $real_url;
+//
+//    /**
+//     * @var string[] 请求头
+//     */
+//    public array $header;
 
     /**
      * 默认的子路径文件夹名
@@ -52,19 +52,25 @@ class Base
      */
     const SHOULD_CHECK_ARR = [];
 
-    /**
-     * @var string 文件存储路径
-     */
-    public string $save_dir;
+//    /**
+//     * @var string 文件存储路径
+//     */
+//    public string $save_dir;
+//
+//    /**
+//     * @var bool 是否分离音频
+//     */
+//    public bool $separate_audio = false;
 
     /**
-     * @var bool 是否分离音频
+     * @var Video 视频信息
      */
-    public bool $is_sep_audio = false;
+    public Video $video;
 
     public function __construct()
     {
         $this->request = new Request();
+        $this->video = new Video();
     }
 
     public function setSaveDir(string $save_dir)
@@ -72,9 +78,10 @@ class Base
         if (substr($save_dir, -1, 1) == '/') {
             $save_dir = substr($save_dir, 0, strlen($save_dir) - 1);
         }
-        $this->save_dir = $save_dir . DIRECTORY_SEPARATOR . 'video/' . static::SAVE_CHILD_DIR . DIRECTORY_SEPARATOR . $this->title . DIRECTORY_SEPARATOR;
-        if (!is_dir($this->save_dir)) {
-            mkdir($this->save_dir, 0777, true);
+        $this->video->save_dir = $save_dir . DIRECTORY_SEPARATOR . 'video/' . static::SAVE_CHILD_DIR
+            . DIRECTORY_SEPARATOR . $this->video->title . DIRECTORY_SEPARATOR;
+        if (!is_dir($this->video->save_dir)) {
+            mkdir($this->video->save_dir, 0777, true);
         }
     }
 
@@ -100,13 +107,8 @@ class Base
 
     public function makeVideo(): Video
     {
-        $video = new Video();
-        $video->title = $this->title;
-        $video->header = $this->header;
-        $video->save_dir = $this->save_dir;
-        $video->real_url = $this->real_url;
-        $video->need_merge = count($this->real_url) > 1;
-        $video->separate_audio = true;
-        return $video;
+        $this->video->header = $this->header;
+        $this->video->need_merge = count($this->video->real_url) > 1;
+        return $this->video;
     }
 }

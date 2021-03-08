@@ -78,7 +78,8 @@ class Video
         return $output;
     }
 
-    public static function merge(Video $video) :string {
-
+    public function merge(Video $video) :string {
+        //todo
+        //$this->specific_path = '';
     }
 }

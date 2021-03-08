@@ -30,6 +30,11 @@ class Application
 
     private string $web_url;
 
+    /**
+     * @var bool 是否分离音频
+     */
+    private bool $separate_audio;
+
 
     public function __construct() {
         $this->cli = new CLImate();
@@ -46,6 +51,7 @@ class Application
         $this->doSetUrl();
         $this->doSetSaveDir();
         $this->doSetCookie();
+        $this->doSetSeparateAudio();
         try {
             $this->doThings();
         } catch (\Exception $e) {
@@ -107,6 +113,13 @@ class Application
         $input_save_dir = $this->cli->input('please input the url of the video page:');
         $web_url = $input_save_dir->prompt();
         $this->web_url = $web_url;
+    }
+
+    public function doSetSeparateAudio() {
+        $separate_audio_arr = ['Yes', 'No'];
+        $input_separate_audio = $this->cli->radio('please check if need separate audio:', $separate_audio_arr);
+        $separate_audio = $input_separate_audio->prompt();
+        $this->separate_audio = strtolower($separate_audio) == 'Yes' ? true : false;
     }
 
     /**
