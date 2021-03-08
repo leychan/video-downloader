@@ -32,7 +32,7 @@ class Bilibili extends Base implements VideoUrlParser
     private string $bvid;
 
     /**
-     * @var string cookie值, 必须
+     * @var array cookie值, 必须
      */
     public array $cookie;
 
