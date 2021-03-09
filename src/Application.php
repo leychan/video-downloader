@@ -152,8 +152,8 @@ class Application
      * @date 2021/3/7
      */
     public function doThings() {
-        $parser = new \video\Parser(new ('\video\website\\' . $this->website), $this->web_url);
-        $video = $parser->doParser($this->cookies, $this->save_dir);
+        $parser = new \video\Parser(new ('\video\website\\' . $this->website));
+        $video = $parser->doParser($this->web_url, $this->cookies, $this->save_dir);
 
         //根据视频对象下载视频
         $downloader = new \video\Downloader($video);
