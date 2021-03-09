@@ -46,13 +46,19 @@ class Application
      * @date 2021/3/7
      */
     public function run() {
-        $this->welcome();
-        $this->doSetWebsite();
-        $this->doSetUrl();
-        $this->doSetSaveDir();
-        $this->doSetCookie();
-        $this->doSetSeparateAudio();
         try {
+            $this->welcome();
+            $this->printLineSpace();
+            $this->doSetWebsite();
+            $this->printLineSpace();
+            $this->doSetUrl();
+            $this->printLineSpace();
+            $this->doSetSaveDir();
+            $this->printLineSpace();
+            $this->doSetCookie();
+            $this->printLineSpace();
+            $this->doSetSeparateAudio();
+            $this->printLineSpace();
             $this->doThings();
         } catch (\Exception $e) {
             $this->cli->to('error')->red($e->getMessage());
@@ -89,7 +95,18 @@ class Application
     public function doSetSaveDir() {
         $input_save_dir = $this->cli->input('please input the save dir of the video:');
         $save_dir = $input_save_dir->prompt();
-        $this->save_dir = empty($save_dir) ? __DIR__ . '/../' : $save_dir;
+        $tmp_save_dir = empty($save_dir) ? __DIR__ . '/../' : $save_dir;
+        $dir_arr = explode('/', $tmp_save_dir);
+        $len = count($dir_arr);
+        for ($i = 0; $i < $len; $i++) {
+            if ($dir_arr[$i] == '..') {
+                if (isset($dir_arr[$i - 1])) {
+                    unset($dir_arr[$i - 1]);
+                    unset($dir_arr[$i]);
+                }
+            }
+        }
+        $this->save_dir = trim(implode('/', $dir_arr));
     }
 
     /**
@@ -104,6 +121,10 @@ class Application
         $this->cookies = $cookies;
     }
 
+    public function printLineSpace() {
+        $this->cli->out('');
+    }
+
     /**
      * @desc 视频页面的url
      * @user lei
@@ -113,6 +134,9 @@ class Application
         $input_save_dir = $this->cli->input('please input the url of the video page:');
         $web_url = $input_save_dir->prompt();
         $this->web_url = $web_url;
+        if (empty(trim($this->web_url))) {
+            throw new \Exception('url can not be empty');
+        }
     }
 
     public function doSetSeparateAudio() {
@@ -136,7 +160,7 @@ class Application
         $downloader->download();
 
         //合并视频
-        //todo
+        $video->merge();
 
         //分离音频
         $video->separateAudio();

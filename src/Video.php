@@ -78,8 +78,21 @@ class Video
         return $output;
     }
 
-    public function merge(Video $video) :string {
-        //todo
-        //$this->specific_path = '';
+    /**
+     * @desc 合并视频
+     * @user lei
+     * @date 2021/3/9
+     */
+    public function merge() {
+        if (!$this->need_merge) {
+            return;
+        }
+        //生成待合并的视频列表, 用作后面的合并
+        $shell_file_list = 'for f in ' . $this->save_dir . '*.flv; do echo "file \'$f\'" >> ' . $this->save_dir . 'list.txt; done';
+        exec($shell_file_list);
+        //合并视频
+        $shell_merge = "ffmpeg -f concat -safe 0 -i {$this->save_dir}list.txt -c copy {$this->save_dir}merged.flv";
+        exec($shell_merge);
+        $this->specific_path = "{$this->save_dir}merged.flv";
     }
 }
