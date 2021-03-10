@@ -87,8 +87,13 @@ class Video
         if (!$this->need_merge) {
             return;
         }
+        //如果存在
+        $file_path = "{$this->save_dir}list.txt";
+        if (file_exists($file_path)) {
+            unlink($file_path);
+        }
         //生成待合并的视频列表, 用作后面的合并
-        $shell_file_list = 'for f in ' . $this->save_dir . '*.flv; do echo "file \'$f\'" >> ' . $this->save_dir . 'list.txt; done';
+        $shell_file_list = 'for f in ' . $this->save_dir . '*.flv; do echo "file \'$f\'" >> ' . $file_path .  '; done';
         exec($shell_file_list);
         //合并视频
         $shell_merge = "ffmpeg -f concat -safe 0 -i {$this->save_dir}list.txt -c copy {$this->save_dir}merged.flv";
