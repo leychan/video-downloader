@@ -12,3 +12,18 @@ download video from websites
 - [x] 根据url下载视频
 - [x] 多段视频合并为一个视频(依赖ffmpeg)
 - [x] 分离音频(依赖ffmpeg)
+
+# 使用
+`$ composer require leychan/video-downloader:1.0.3`
+
+新建`index.php`文件
+```php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+
+(new \video\Application())->run();
+```
+
+`$ php -f index.php`
