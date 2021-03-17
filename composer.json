@@ -1,5 +1,5 @@
 {
-    "name": "lei/video-downloader",
+    "name": "leychan/video-downloader",
     "type": "project",
     "require": {
         "guzzlehttp/guzzle": "^7.2",
