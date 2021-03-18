@@ -14,6 +14,7 @@ download video from websites
 - [x] 分离音频(依赖ffmpeg)
 
 # 使用
+## 使用 composer
 `$ composer require leychan/video-downloader:1.0.3`
 
 新建`index.php`文件
@@ -22,8 +23,14 @@ download video from websites
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-
 (new \video\Application())->run();
 ```
+
+`$ php -f index.php`
+
+## 直接git clone
+`$ git clone https://github.com/leychan/video-downloader`
+
+`$ cd video-downloader`
 
 `$ php -f index.php`
