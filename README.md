@@ -25,6 +25,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 (new \video\Application())->run();
 ```
+`$ composer install`
 
 `$ php -f index.php`
 
@@ -32,5 +33,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 `$ git clone https://github.com/leychan/video-downloader`
 
 `$ cd video-downloader`
+
+`$ composer install`
 
 `$ php -f index.php`
