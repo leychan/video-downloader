@@ -66,6 +66,11 @@ class Base
      */
     public Video $video;
 
+    /**
+     * @var array http请求头
+     */
+    public $header = [];
+
     public function __construct()
     {
         $this->request = new Request();
