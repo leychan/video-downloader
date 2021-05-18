@@ -115,8 +115,12 @@ class Application
      * @date 2021/3/7
      */
     public function doSetCookie() {
-        $input_cookie = $this->cli->input('please input cookie data of the website, default "":');
-        $cookie_str = $input_cookie->prompt();
+        $cookie_str = Cookie::get($this->website);
+        if (empty($cookie_str)) {
+            $input_cookie = $this->cli->input('please input cookie data of the website, default "":');
+            $cookie_str = $input_cookie->prompt();
+            Cookie::save($cookie_str, $this->website);
+        }
         $cookies = Helper::parseCookie($cookie_str);
         $this->cookies = $cookies;
     }
@@ -152,7 +156,9 @@ class Application
      * @date 2021/3/7
      */
     public function doThings() {
-        $parser = new \video\Parser(new ('\video\website\\' . $this->website));
+        $website_class = '\video\website\\' . $this->website;
+        $website = new $website_class;
+        $parser = new \video\Parser($website);
         $video = $parser->doParser($this->web_url, $this->cookies, $this->save_dir);
 
         //根据视频对象下载视频
