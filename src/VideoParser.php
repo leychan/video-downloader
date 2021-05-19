@@ -2,7 +2,7 @@
 
 namespace video;
 
-interface VideoUrlParser
+interface VideoParser
 {
     /**
      * @desc 配置
@@ -28,6 +28,15 @@ interface VideoUrlParser
      * @return mixed
      */
     public function setSaveDir(string $save_dir);
+
+    /**
+     * @desc 设置是否分离音频
+     * @user chenlei11
+     * @date 2021/5/19
+     * @param bool $separate_audio
+     * @return mixed
+     */
+    public function setSeparateAudio(bool $separate_audio);
 
     public function makeVideo(): Video;
 

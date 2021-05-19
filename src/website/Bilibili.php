@@ -2,10 +2,9 @@
 
 namespace video\website;
 
-use video\VideoUrlParser;
 use video\Request;
 
-class Bilibili extends Base implements VideoUrlParser
+class Bilibili extends Base
 {
     /**
      * @var string 获取视频真实链接的url
@@ -38,21 +37,6 @@ class Bilibili extends Base implements VideoUrlParser
 
     public Request $request;
 
-//    /**
-//     * @var string 视频标题
-//     */
-//    public string $title;
-//
-//    /**
-//     * @var array 视频的真实地址集合
-//     */
-//    public array $real_url;
-//
-//    /**
-//     * @var string[] 请求头
-//     */
-//    public array $header;
-
     /**
      * 默认的子路径文件夹名
      */
@@ -72,16 +56,6 @@ class Bilibili extends Base implements VideoUrlParser
      * 配置文件中必须包含的键
      */
     const SHOULD_CHECK_ARR = ['get_aid_url', 'get_cid_url', 'get_video_url'];
-
-//    /**
-//     * @var string 文件存储路径
-//     */
-//    public string $save_dir;
-//
-//    /**
-//     * @var bool 是否分离音频
-//     */
-//    public bool $separate_audio = false;
 
     public function __construct()
     {
@@ -113,6 +87,12 @@ class Bilibili extends Base implements VideoUrlParser
         $this->video->real_url = array_column($body['data']['durl'], 'url');
     }
 
+    /**
+     * @desc 解析bvid
+     * @user lei
+     * @date 2021/5/19
+     * @throws \Exception
+     */
     protected function parseBvid() {
         preg_match('/BV[\w]+/', $this->web_url, $matches);
         if (empty($matches)) {
@@ -121,6 +101,12 @@ class Bilibili extends Base implements VideoUrlParser
         $this->bvid = $matches[0];
     }
 
+    /**
+     * @desc 解析aid和title
+     * @user lei
+     * @date 2021/5/19
+     * @throws \Exception
+     */
     protected function getAidAndTitle() {
         $url = $this->get_aid_url . $this->bvid;
         $body = $this->doGet($url);
@@ -128,6 +114,12 @@ class Bilibili extends Base implements VideoUrlParser
         $this->video->title = str_replace(' | ', '|', $body['data']['title']);
     }
 
+    /**
+     * @desc 解析cid
+     * @user lei
+     * @date 2021/5/19
+     * @throws \Exception
+     */
     protected function getCid() {
         $url = $this->get_cid_url . $this->aid;
         $body = $this->doGet($url);

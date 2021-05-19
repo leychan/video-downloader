@@ -3,9 +3,6 @@
 
 namespace video;
 
-
-use JetBrains\PhpStorm\Pure;
-
 class Helper
 {
     /**
@@ -36,5 +33,9 @@ class Helper
     public static function parseStringToArray(string $separate_character, string $str) :array {
         $str = trim($str);
         return explode($separate_character, $str);
+    }
+
+    public static function printLine() {
+        echo PHP_EOL;
     }
 }

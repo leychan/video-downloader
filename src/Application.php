@@ -11,7 +11,7 @@ class Application
     /**
      * @var CLImate 命令行
      */
-    private $cli;
+    private CLImate $cli;
 
     /**
      * @var string 站点标识
@@ -26,9 +26,9 @@ class Application
     /**
      * @var string 请求带上的cookies
      */
-    private array $cookies;
+    private array $cookie;
 
-    private string $web_url;
+    private string $video_page_url;
 
     /**
      * @var bool 是否分离音频
@@ -48,18 +48,24 @@ class Application
     public function run() {
         try {
             $this->welcome();
-            $this->printLineSpace();
+            Helper::printLine();
+
             $this->doSetWebsite();
-            $this->printLineSpace();
+            Helper::printLine();
+
             $this->doSetUrl();
-            $this->printLineSpace();
+            Helper::printLine();
+
             $this->doSetSaveDir();
-            $this->printLineSpace();
+            Helper::printLine();
+
             $this->doSetCookie();
-            $this->printLineSpace();
+            Helper::printLine();
+
             $this->doSetSeparateAudio();
-            $this->printLineSpace();
-            $this->doThings();
+            Helper::printLine();
+
+            $this->deal();
         } catch (\Exception $e) {
             $this->cli->to('error')->red($e->getMessage());
             exit;
@@ -73,7 +79,7 @@ class Application
      * @date 2021/3/7
      */
     public function welcome() {
-        $this->cli->out('welcome to use video-downloader');
+        $this->cli->bold('welcome to use video-downloader');exit;
     }
 
     /**
@@ -121,8 +127,8 @@ class Application
             $cookie_str = $input_cookie->prompt();
             Cookie::save($cookie_str, $this->website);
         }
-        $cookies = Helper::parseCookie($cookie_str);
-        $this->cookies = $cookies;
+        $cookie = Helper::parseCookie($cookie_str);
+        $this->cookie = $cookie;
     }
 
     public function printLineSpace() {
@@ -137,8 +143,8 @@ class Application
     public function doSetUrl() {
         $input_save_dir = $this->cli->input('please input the url of the video page:');
         $web_url = $input_save_dir->prompt();
-        $this->web_url = $web_url;
-        if (empty(trim($this->web_url))) {
+        $this->video_page_url = $web_url;
+        if (empty(trim($this->video_page_url))) {
             throw new \Exception('url can not be empty');
         }
     }
@@ -147,7 +153,7 @@ class Application
         $separate_audio_arr = ['Yes', 'No'];
         $input_separate_audio = $this->cli->radio('please check if need separate audio:', $separate_audio_arr);
         $separate_audio = $input_separate_audio->prompt();
-        $this->separate_audio = strtolower($separate_audio) == 'Yes' ? true : false;
+        $this->separate_audio = strtolower($separate_audio) == 'yes' ? true : false;
     }
 
     /**
@@ -155,20 +161,17 @@ class Application
      * @user lei
      * @date 2021/3/7
      */
-    public function doThings() {
+    public function deal() {
         $website_class = '\video\website\\' . $this->website;
         $website = new $website_class;
         $parser = new \video\Parser($website);
-        $video = $parser->doParser($this->web_url, $this->cookies, $this->save_dir);
+        $video = $parser->run($this->video_page_url, $this->cookie, $this->save_dir, $this->separate_audio);
 
         //根据视频对象下载视频
         $downloader = new \video\Downloader($video);
-        $downloader->download();
+        $downloader->run();
 
-        //合并视频
-        $video->merge();
-
-        //分离音频
-        $video->separateAudio();
+        $deal = new DealVideoSlice($video);
+        $deal->run();
     }
 }

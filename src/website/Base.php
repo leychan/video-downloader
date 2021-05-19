@@ -5,9 +5,10 @@ namespace video\website;
 use video\Config;
 use video\Request;
 use video\Video;
+use video\VideoParser;
 
 
-class Base
+abstract class Base implements VideoParser
 {
     /**
      * @var string 要解析的url, 即b站打开视频页面的链接
@@ -17,24 +18,9 @@ class Base
     /**
      * @var string cookie值, 必须
      */
-    public array $cookie;
+    public array $cookie = [];
 
     public Request $request;
-
-//    /**
-//     * @var string 视频标题
-//     */
-//    public string $title;
-//
-//    /**
-//     * @var array 视频的真实地址集合
-//     */
-//    public array $real_url;
-//
-//    /**
-//     * @var string[] 请求头
-//     */
-//    public array $header;
 
     /**
      * 默认的子路径文件夹名
@@ -51,16 +37,6 @@ class Base
      */
     const SHOULD_CHECK_ARR = [];
 
-//    /**
-//     * @var string 文件存储路径
-//     */
-//    public string $save_dir;
-//
-//    /**
-//     * @var bool 是否分离音频
-//     */
-//    public bool $separate_audio = false;
-
     /**
      * @var Video 视频信息
      */
@@ -75,6 +51,10 @@ class Base
     {
         $this->request = new Request();
         $this->video = new Video();
+    }
+
+    public function setSeparateAudio(bool $separate_audio) {
+        $this->video->separate_audio = $separate_audio;
     }
 
     public function setSaveDir(string $save_dir)
@@ -108,6 +88,8 @@ class Base
             $this->$val = $config[$val];
         }
     }
+
+    abstract public function parseUrl(string $url);
 
     public function makeVideo(): Video
     {

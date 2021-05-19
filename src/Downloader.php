@@ -14,7 +14,11 @@ class Downloader
     {
         $this->video = $video;
         $this->request = new Request();
+    }
+
+    public function run() {
         $this->checkVideoProperty();
+        $this->download();
     }
 
     public function download() {
