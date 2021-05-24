@@ -21,19 +21,24 @@ class Application
     /**
      * @var string 文件保存的目录
      */
-    private string $save_dir;
+    private string $save_dir = '';
 
     /**
      * @var string 请求带上的cookies
      */
-    private array $cookie;
+    private array $cookie = [];
 
-    private string $video_page_url;
+    private string $video_page_url = '';
 
     /**
      * @var bool 是否分离音频
      */
-    private bool $separate_audio;
+    private bool $separate_audio = true;
+
+    /**
+     * @var string 音频标题
+     */
+    private string $audio_title = '';
 
 
     public function __construct() {
@@ -79,7 +84,7 @@ class Application
      * @date 2021/3/7
      */
     public function welcome() {
-        $this->cli->bold('welcome to use video-downloader');exit;
+        $this->cli->bold('welcome to use video-downloader');
     }
 
     /**
@@ -125,9 +130,9 @@ class Application
         if (empty($cookie_str)) {
             $input_cookie = $this->cli->input('please input cookie data of the website, default "":');
             $cookie_str = $input_cookie->prompt();
-            Cookie::save($cookie_str, $this->website);
+            $cookie_str && Cookie::save($cookie_str, $this->website);
         }
-        $cookie = Helper::parseCookie($cookie_str);
+        $cookie = !empty($cookie_str) ? Helper::parseCookie($cookie_str) : [];
         $this->cookie = $cookie;
     }
 
@@ -153,7 +158,17 @@ class Application
         $separate_audio_arr = ['Yes', 'No'];
         $input_separate_audio = $this->cli->radio('please check if need separate audio:', $separate_audio_arr);
         $separate_audio = $input_separate_audio->prompt();
-        $this->separate_audio = strtolower($separate_audio) == 'yes' ? true : false;
+        if ($separate_audio == 'Yes') {
+            $this->doSetAudioTitle();
+            $this->separate_audio = true;
+            return;
+        }
+        $this->separate_audio = false;
+    }
+
+    public function doSetAudioTitle() {
+        $title_cli = $this->cli->input('please input the audio title:');
+        $this->audio_title = $title_cli->prompt() ?: '';
     }
 
     /**
@@ -165,7 +180,7 @@ class Application
         $website_class = '\video\website\\' . $this->website;
         $website = new $website_class;
         $parser = new \video\Parser($website);
-        $video = $parser->run($this->video_page_url, $this->cookie, $this->save_dir, $this->separate_audio);
+        $video = $parser->run($this->video_page_url, $this->cookie, $this->save_dir, $this->separate_audio, $this->audio_title);
 
         //根据视频对象下载视频
         $downloader = new \video\Downloader($video);

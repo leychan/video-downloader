@@ -35,6 +35,13 @@ class Video
     public bool $separate_audio = false;
 
     /**
+     * @var string 音频名称
+     */
+    public string $audio_title = '';
+
+    public string $audio_title_default = 'out';
+
+    /**
      * @var bool 是否合并
      */
     public bool $need_merge = false;

@@ -22,10 +22,10 @@ class DealVideoSlice {
         }
         //如果只有一个片段,或者有具体的合成的
         if (!empty($this->video->specific_path)) {
-            self::separateAudioByVideo($this->video->specific_path, $this->video->save_dir);
+            $this->doSeparateAudio();
         } else if (count($this->video->real_url) == 1) {
             $this->video->specific_path = $this->video->save_dir . '0.flv';
-            self::separateAudioByVideo($this->video->specific_path, $this->video->save_dir);
+            $this->doSeparateAudio();
         } else {
             throw new \Exception('视频还未合并, 请合并后再进行音频分离');
         }
@@ -39,8 +39,10 @@ class DealVideoSlice {
      * @param string $save_dir
      * @return array
      */
-    protected static function separateAudioByVideo(string $path, string $save_dir) :array {
-        $shell = "ffmpeg -i '{$path}' '{$save_dir}out.mp3'";
+    protected function doSeparateAudio() :array {
+        $this->video->audio_title = $this->video->audio_title ?: $this->video->audio_title_default;
+        $shell = "ffmpeg -i '{$this->video->specific_path}' '{$this->video->save_dir}{$this->video->audio_title}.mp3'";
+        echo $shell, PHP_EOL;
         exec($shell, $output);
         return $output;
     }
@@ -73,7 +75,6 @@ class DealVideoSlice {
         $this->merge();
 
         //分离音频
-        var_dump($this->video);
         $this->separateAudio();
     }
 }

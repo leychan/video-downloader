@@ -38,6 +38,15 @@ interface VideoParser
      */
     public function setSeparateAudio(bool $separate_audio);
 
+    /**
+     * @desc 设置音频标题
+     * @user chenlei11
+     * @date 2021/5/24
+     * @param string $audio_title
+     * @return mixed
+     */
+    public function setAudioTitle(string $audio_title);
+
     public function makeVideo(): Video;
 
     public function setCookie(array $cookie);

@@ -89,6 +89,10 @@ abstract class Base implements VideoParser
         }
     }
 
+    public function setAudioTitle($audio_title) {
+        $this->video->audio_title = $audio_title;
+    }
+
     abstract public function parseUrl(string $url);
 
     public function makeVideo(): Video
