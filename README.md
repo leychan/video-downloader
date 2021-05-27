@@ -6,6 +6,7 @@ download video from websites
 
 # 支持的站点
 - [x] B站
+- [x] youtube (需代理)
 
 # 功能
 目前b站可使用的功能:

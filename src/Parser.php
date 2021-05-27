@@ -25,8 +25,8 @@ class Parser
         $this->p->setCookie($cookie);
         $this->p->setSeparateAudio($separate_audio);
         $this->p->setAudioTitle($audio_title);
-        $this->p->setSaveDir($save_dir);
         $this->p->parseUrl($web_url);
+        $this->p->setSaveDir($save_dir);
         $this->p->setProxy();
         return $this->p->makeVideo();
     }

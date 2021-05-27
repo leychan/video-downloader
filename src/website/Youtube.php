@@ -45,11 +45,10 @@ class Youtube extends Base {
         $this->setConfig();
         $this->getVideoId();
         $this->getRealUrls();
-        $this->setTitle();
     }
 
-    public function setTitle() {
-        $this->video->title = $this->video->audio_title;
+    public function setTitle(string $title) {
+        $this->video->title = $title;
     }
 
     public function getVideoId() {
@@ -73,6 +72,9 @@ class Youtube extends Base {
         ], false);
 
         parse_str($body, $body_arr);
+        $title = json_decode($body_arr['player_response'], true)['videoDetails']['title'];
+        $title = $this->formatTitle($title);
+        $this->setTitle($title);
         $this->checkStatus($body_arr['status']);
         $formats = json_decode($body_arr['player_response'], true)['streamingData']['formats'];
         foreach ($formats as $format) {
@@ -84,5 +86,8 @@ class Youtube extends Base {
         if ($status !== self::STATUS_OK) {
             throw new \Exception('youtube返回状态不正确');
         }
+    }
+    public function formatTitle($title) {
+        return str_replace('/', ' ', $title);
     }
 }
