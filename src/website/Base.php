@@ -45,7 +45,9 @@ abstract class Base implements VideoParser
     /**
      * @var array http请求头
      */
-    public $header = [];
+    public array $header = [];
+
+    public array $proxy = [];
 
     public function __construct()
     {
@@ -87,6 +89,10 @@ abstract class Base implements VideoParser
             }
             $this->$val = $config[$val];
         }
+    }
+
+    public function setProxy() {
+        $this->video->proxy = $this->proxy;
     }
 
     public function setAudioTitle($audio_title) {

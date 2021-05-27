@@ -23,9 +23,13 @@ class Downloader
 
     public function download() {
         $multi_seg = count($this->video->real_url);
+        $extra_options = [];
+        if (!empty($this->video->proxy)) {
+            $extra_options = ['proxy' => $this->video->proxy];
+        }
         for ($i = 0; $i < $multi_seg; $i++) {
             $save_to = $this->video->save_dir . $i . '.flv';
-            $this->request->download($this->video->real_url[$i], $this->video->header, $save_to);
+            $this->request->download($this->video->real_url[$i], $this->video->header, $save_to, $extra_options);
         }
     }
 

@@ -50,4 +50,9 @@ class Video
      * @var string 合成视频的具体路径
      */
     public string $specific_path = '';
+
+    /**
+     * @var array 代理设置
+     */
+    public array $proxy = [];
 }

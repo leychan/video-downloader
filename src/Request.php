@@ -71,7 +71,7 @@ class Request
      */
     public function get(string $url, array $option, bool $return_array = true) {
         $res = $this->client->request('GET', $url, $option);
-        $body = $res->getBody();
+        $body = $res->getBody()->getContents();
         if ($return_array) {
             return json_decode($body, true);
         }
