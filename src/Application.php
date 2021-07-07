@@ -40,6 +40,11 @@ class Application
      */
     private string $audio_title = '';
 
+    /**
+     * @var bool 是否下载收藏夹
+     */
+    private bool $is_fav;
+
 
     public function __construct() {
         $this->cli = new CLImate();
@@ -62,6 +67,9 @@ class Application
             Helper::printLine();
 
             $this->doSetSaveDir();
+            Helper::printLine();
+
+            $this->doSetDownloadFavList();
             Helper::printLine();
 
             $this->doSetCookie();
@@ -132,6 +140,9 @@ class Application
             $cookie_str = $input_cookie->prompt();
             $cookie_str && Cookie::save($cookie_str, $this->website);
         }
+        if (empty($cookie_str) && $this->is_fav) {
+            $this->doSetCookie();
+        }
         $cookie = !empty($cookie_str) ? Helper::parseCookie($cookie_str) : [];
         $this->cookie = $cookie;
     }
@@ -169,6 +180,16 @@ class Application
     public function doSetAudioTitle() {
         $title_cli = $this->cli->input('please input the audio title:');
         $this->audio_title = $title_cli->prompt() ?: '';
+    }
+
+    public function doSetDownloadFavList() {
+        $is_fav = ['Yes', 'No'];
+        $fav = $this->cli->radio('please check is download favlist:', $is_fav);
+        if ($fav == 'Yes') {
+            $this->is_fav = true;
+            return;
+        }
+        $this->is_fav = false;
     }
 
     /**

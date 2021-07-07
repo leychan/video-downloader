@@ -2,6 +2,7 @@
 
 namespace video\website;
 
+use video\Config;
 use video\Request;
 
 class Bilibili extends Base
@@ -20,6 +21,11 @@ class Bilibili extends Base
      * @var string 获取cid的url
      */
     public string $get_cid_url;
+
+    /**
+     * @var string 获取收藏夹列表明细的url
+     */
+    public string $favlist_url;
 
     /**
      * @var string 要解析的url, 即b站打开视频页面的链接
@@ -134,5 +140,15 @@ class Bilibili extends Base
             throw new \Exception($body['message']);
         }
         return $body;
+    }
+
+    private function getFavList() {
+        $config_key = static::CONFIG_KEY;
+        $config = Config::getConfig($config_key);
+        $url = $config['favlist_url'] . '1178578486';
+        $body = $this->doGet($url);
+        $data = $body['data'];
+        $bvids = array_column($data, 'bvid');
+        return $bvids;
     }
 }
